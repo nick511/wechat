@@ -6,6 +6,8 @@ import time
 
 
 def kv2element(key, value, doc):
+    if value is None:
+        return None
     ele = doc.createElement(key)
     if isinstance(value, str) or isinstance(value, unicode):
         data = doc.createCDATASection(value)
@@ -21,7 +23,8 @@ def fields2elements(tupleObj, enclose_tag=None, doc=None):
         xml = doc.createElement(enclose_tag)
         for key in tupleObj._fields:
             ele = kv2element(key, getattr(tupleObj, key), doc)
-            xml.appendChild(ele)
+            if ele is not None:
+                xml.appendChild(ele)
         return xml
     else:
         return [kv2element(key, getattr(tupleObj, key), doc)
